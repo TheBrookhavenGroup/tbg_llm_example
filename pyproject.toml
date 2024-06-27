@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = []
+
+[project]
+name = "tbg_llm_example"
+description = "Learning to use LLMs"
+readme = "README.md"
+authors = [ {name="Marc Schwarzschild", email="ms@TheBrookhavenGroup.com"}, ]
+maintainers = [ {name="Marc Schwarzschild", email="ms@TheBrookhavenGroup.com"}, ]
+requires-python = ">=3.12"
+keywords = ["llm"]
+classifiers = []
+license = {file="LICENSE"}
+dependencies = ["accelerate", "transformers"]
+version = "0.0.1"
+
+[project.urls]
+homepage = "https://github.com/thebrookhavengroup/tbg_llm_example"
+repository = "https://github.com/thebrookhavengroup/tbg_llm_example"
+documentation = "https://github.com/thebrookhavengroup/tbg_llm_example"
+
+[project.scripts]
+binoculars = "tbg_llm_example:run"
+
+
