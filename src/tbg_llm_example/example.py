@@ -17,8 +17,8 @@ def run(input_string="The quick brown fox"):
                                              next_token_id.unsqueeze(0))))
         print(f"The entire output string: {result}")
 
-        # We can also generate lots of output by predicting the next token in a loop,
-        # but this is wrapped for us in a method called generate()
+        # We can also generate lots of output by predicting the next token
+        # in a loop, but this is wrapped for us in a method called generate()
 
         # Generate -- or predict the next token in the sequence
         output = model.generate(input_ids, max_length=20)

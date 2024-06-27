@@ -7,8 +7,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 def get_one_models(model_name):
 
     # Load the model and tokenizer
-    model_args = dict(trust_remote_code=False, low_cpu_mem_usage=True)
-    model = AutoModelForCausalLM.from_pretrained(model_name, **model_args)
+    model = AutoModelForCausalLM.from_pretrained(model_name,
+                                                 trust_remote_code=False,
+                                                 low_cpu_mem_usage=True)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     return model, tokenizer
@@ -20,7 +21,8 @@ def get_models(model_names=["EleutherAI/pythia-410m"]):
 
 
 def get_model_output(model, tokenizer, input_string):
-    # A model is a function that takes a tensor of token indices and returns a dictionary of model outputs
+    # A model is a function that takes a tensor of token indices and returns a
+    # dictionary of model outputs
 
     # Tokenize -- or convert string to a list of indices from the vocabulary
     input_ids = tokenizer.encode(input_string, return_tensors="pt")
@@ -28,7 +30,8 @@ def get_model_output(model, tokenizer, input_string):
     # Generate -- or predict the next token in the sequence
     output = model(input_ids)
 
-    # logits are probabilitys of each token in the vocabulary at each location in the sequence given
+    # logits are probabilitys of each token in the vocabulary at each location
+    # in the sequence given
     # all the tokens before it
     logits = output["logits"]
 
