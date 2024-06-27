@@ -2,9 +2,6 @@
 requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-py-modules = []
-
 [project]
 name = "tbg_llm_example"
 description = "Learning to use LLMs"
