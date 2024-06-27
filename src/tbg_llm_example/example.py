@@ -1,5 +1,5 @@
 import torch
-from llmmodels import get_models, get_model_output
+from .llmmodels import get_models, get_model_output
 
 
 def run(input_string="The quick brown fox"):
