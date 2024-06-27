@@ -20,6 +20,10 @@ homepage = "https://github.com/thebrookhavengroup/tbg_llm_example"
 repository = "https://github.com/thebrookhavengroup/tbg_llm_example"
 documentation = "https://github.com/thebrookhavengroup/tbg_llm_example"
 
+[project.optional-dependencies]
+dev = ["pycodestyle"]
+
+
 [project.scripts]
 binoculars = "tbg_llm_example:run"
 
