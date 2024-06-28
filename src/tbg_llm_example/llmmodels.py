@@ -4,41 +4,58 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
-def get_one_models(model_name):
+class Algorithm:
+    def __init__(self, logger=None):
+        self.logger = logger
+        model_names = ["EleutherAI/pythia-410m", "EleutherAI/pythia-410m"]
+        self.models = [self.get_model(model_name)
+                       for model_name in model_names]
 
-    # Load the model and tokenizer
-    model = AutoModelForCausalLM.from_pretrained(model_name,
-                                                 trust_remote_code=False,
-                                                 low_cpu_mem_usage=True)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    @staticmethod
+    def get_model(model_name):
+        # Load the model and tokenizer.  This will be memoized.
+        model = AutoModelForCausalLM.from_pretrained(model_name,
+                                                     trust_remote_code=False,
+                                                     low_cpu_mem_usage=True)
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-    return model, tokenizer
+        return model, tokenizer
 
+    def one(self, model, tokenizer, input_text="The quick brown fox"):
+        # Run a model one time
 
-def get_models(model_names=["EleutherAI/pythia-410m"]):
-    # "EleutherAI/pythia-410m" is small enough to run on a CPU.
-    return [get_one_models(model_name) for model_name in model_names]
+        input_ids = tokenizer.encode(input_text, return_tensors="pt")
 
+        # Generate -- or predict the next token in the sequence
+        output = model(input_ids)
 
-def get_model_output(model, tokenizer, input_string):
-    # A model is a function that takes a tensor of token indices and returns a
-    # dictionary of model outputs
+        # logits are probabilitys of each token in the vocabulary
+        # at each location in the sequence given all the tokens before it.
+        logits = output["logits"]
 
-    # Tokenize -- or convert string to a list of indices from the vocabulary
-    input_ids = tokenizer.encode(input_string, return_tensors="pt")
+        # Most likely next token
+        next_token_id = logits.argmax(-1)[0, -1]
 
-    # Generate -- or predict the next token in the sequence
-    output = model(input_ids)
+        # Decode the token to a string
+        next_token_string = tokenizer.decode(next_token_id)
 
-    # logits are probabilitys of each token in the vocabulary at each location
-    # in the sequence given
-    # all the tokens before it
-    logits = output["logits"]
+        logger = self.logger
+        if logger:
+            logger.info(f"input_string: {input_text}")
+            logger.info(f"input_ids (tokenized input): {input_ids}")
+            logger.info(f"output keys: {output.keys()}")
+            logger.info(f"output logits shape: {logits.shape}")
+            logger.info(f"next_token_id: {next_token_id}")
+            logger.info(f"next_token_string: {next_token_string}")
 
-    # Most likely next token
-    next_token_id = logits.argmax(-1)[0, -1]
+        return input_ids, output, logits, next_token_id, next_token_string
 
-    # Decode the token to a string
-    next_token_string = tokenizer.decode(next_token_id)
-
-    return input_ids, output, logits, next_token_id, next_token_string
+    def run(self, input_text="The quick brown fox"):
+        result = []
+        for model, tokenizer in self.models:
+            input_ids, output, logits, next_token_id, next_token_string = (
+                self.one(model, tokenizer, input_text))
+            result.append((input_ids, output, logits,
+                           next_token_id, next_token_string))
+            input_text += next_token_string
+        return result

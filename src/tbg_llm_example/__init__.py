@@ -1,1 +1,1 @@
-from .example import run
+from .llmmodels import Algorithm
