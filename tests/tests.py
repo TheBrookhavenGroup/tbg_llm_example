@@ -9,4 +9,5 @@ class LLMTests(unittest.TestCase):
     def test_fox(self):
         input_string = "The quick brown fox"
         result = self.algorithm.run(input_string)
-        self.assertEqual(' over', result[1][4])
+        self.assertTrue(result['status'])
+        self.assertEqual('over', result['output'].split()[-1])

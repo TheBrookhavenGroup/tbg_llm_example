@@ -58,4 +58,6 @@ class Algorithm:
             result.append((input_ids, output, logits,
                            next_token_id, next_token_string))
             input_text += next_token_string
-        return result
+
+        status = next_token_string == " over"
+        return {'status': status, 'output': input_text}
