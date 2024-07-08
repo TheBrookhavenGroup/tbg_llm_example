@@ -4,7 +4,8 @@ from src.tbg_llm_example.llmmodels import Algorithm
 
 class LLMTests(unittest.TestCase):
     def setUp(self):
-        self.algorithm = Algorithm()
+        models = ["EleutherAI/pythia-410m", "EleutherAI/pythia-410m"]
+        self.algorithm = Algorithm(model_names=models)
 
     def test_fox(self):
         input_string = "The quick brown fox"

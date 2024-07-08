@@ -5,9 +5,10 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 class Algorithm:
-    def __init__(self, logger=None):
+    def __init__(self, logger=None, model_names=None):
         self.logger = logger
-        model_names = ["EleutherAI/pythia-410m", "EleutherAI/pythia-410m"]
+        if model_names is None:
+            model_names = ["EleutherAI/pythia-410m", "EleutherAI/pythia-410m"]
         self.models = [self.get_model(model_name)
                        for model_name in model_names]
 
